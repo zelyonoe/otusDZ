@@ -1,0 +1,52 @@
+---
+# Глобальные переменные для всех хостов
+
+# Системные пакеты для установки
+system_packages:
+  - curl
+  - wget
+  - unzip
+  - vim
+  - htop
+  - git
+  - build-essential
+  - software-properties-common
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - lsb-release
+  - ufw
+  - fail2ban
+
+# Python пакеты
+python_packages:
+  - python3
+  - python3-pip
+  - python3-venv
+  - python3-dev
+
+# Node.js версия
+nodejs_version: "18"
+
+# Настройки безопасности
+security:
+  ssh_port: 22
+  disable_root_login: true
+  password_authentication: false
+  ufw_enabled: true
+  fail2ban_enabled: true
+
+# Настройки приложения
+app:
+  name: "webapp"
+  user: "app"
+  group: "app"
+  home: "/opt/app"
+  repository: "https://github.com/example/webapp.git"  # Замените на ваш репозиторий
+  
+# Настройки Nginx
+nginx:
+  server_name: "_"  # Замените на ваш домен
+  listen_port: 80
+  client_max_body_size: "50M"
+  keepalive_timeout: 65

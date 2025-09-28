@@ -1,0 +1,71 @@
+---
+- name: "Проверка состояния серверов и сервисов"
+  hosts: dev_servers
+  become: yes
+  gather_facts: yes
+  
+  tasks:
+    - name: "Проверка времени работы системы"
+      shell: uptime
+      register: uptime_result
+      tags: ['status']
+
+    - name: "Проверка использования диска"
+      shell: df -h
+      register: disk_usage
+      tags: ['status']
+
+    - name: "Проверка использования памяти"
+      shell: free -h
+      register: memory_usage
+      tags: ['status']
+
+    - name: "Проверка статуса Nginx"
+      systemd:
+        name: nginx
+      register: nginx_status
+      tags: ['status', 'nginx']
+
+    - name: "Проверка статуса приложения"
+      systemd:
+        name: "{{ app.name }}"
+      register: app_status
+      tags: ['status', 'app']
+
+    - name: "Проверка статуса UFW"
+      shell: ufw status
+      register: ufw_status
+      when: security.ufw_enabled
+      tags: ['status', 'security']
+
+    - name: "Проверка статуса Fail2Ban"
+      systemd:
+        name: fail2ban
+      register: fail2ban_status
+      when: security.fail2ban_enabled
+      tags: ['status', 'security']
+
+    - name: "Вывод информации о системе"
+      debug:
+        msg: |
+          Хост: {{ inventory_hostname }}
+          Время работы: {{ uptime_result.stdout }}
+          Nginx: {{ 'активен' if nginx_status.status.ActiveState == 'active' else 'неактивен' }}
+          Приложение: {{ 'активно' if app_status.status.ActiveState == 'active' else 'неактивно' }}
+          UFW: {{ ufw_status.stdout.split('\n')[0] if ufw_status is defined else 'не проверялся' }}
+          Fail2Ban: {{ 'активен' if fail2ban_status is defined and fail2ban_status.status.ActiveState == 'active' else 'неактивен' }}
+      tags: ['status']
+
+    - name: "Проверка доступности приложения"
+      uri:
+        url: "http://{{ inventory_hostname }}:{{ app_port }}/health"
+        method: GET
+        timeout: 10
+      register: health_check
+      ignore_errors: yes
+      tags: ['status', 'health']
+
+    - name: "Результат проверки здоровья"
+      debug:
+        msg: "Приложение {{ 'отвечает' if health_check.status == 200 else 'не отвечает' }}"
+      tags: ['status', 'health']
