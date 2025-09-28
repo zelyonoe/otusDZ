@@ -1,0 +1,11 @@
+nginx_server_name: _
+nginx_listen_port: 80
+nginx_app_root: /var/www/app/public
+
+# If set (e.g. http://127.0.0.1:3000), NGINX will proxy to upstream.
+# If empty, NGINX will serve static content from nginx_app_root.
+nginx_proxy_upstream: ""
+
+# Firewall (UFW) management; disabled by default to avoid surprises
+enable_ufw: false
+

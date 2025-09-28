@@ -1,0 +1,47 @@
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: present
+  when:
+    - ansible_os_family == 'Debian'
+    - not ansible_check_mode
+
+- name: Create app root directory
+  file:
+    path: "{{ nginx_app_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Deploy default index.html if no upstream
+  copy:
+    dest: "{{ nginx_app_root }}/index.html"
+    content: |
+      <!doctype html>
+      <html lang="en">
+      <head><meta charset="utf-8"><title>NGINX OK</title></head>
+      <body><h1>NGINX is up</h1></body>
+      </html>
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  when: not nginx_proxy_upstream
+
+- name: Deploy nginx site config
+  template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload nginx
+
+- name: Ensure nginx is enabled and running
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  when:
+    - not ansible_check_mode
+

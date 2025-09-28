@@ -1,0 +1,25 @@
+server {
+    listen {{ nginx_listen_port }} default_server;
+    listen [::]:{{ nginx_listen_port }} default_server;
+    server_name {{ nginx_server_name }};
+
+    {% if nginx_proxy_upstream %}
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass {{ nginx_proxy_upstream }};
+    }
+    {% else %}
+    root {{ nginx_app_root }};
+    index index.html;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    {% endif %}
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+}
+

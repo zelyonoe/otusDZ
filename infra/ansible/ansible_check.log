@@ -1,0 +1,205 @@
+ansible-playbook [core 2.16.14]
+  config file = /workspace/infra/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /home/ubuntu/.local/lib/python3.13/site-packages/ansible
+  ansible collection location = /home/ubuntu/.ansible/collections:/usr/share/ansible/collections
+  executable location = /home/ubuntu/.local/bin/ansible-playbook
+  python version = 3.13.3 (main, Apr  8 2025, 19:55:40) [GCC 14.2.0] (/usr/bin/python3)
+  jinja version = 3.1.6
+  libyaml = True
+Using /workspace/infra/ansible/ansible.cfg as config file
+host_list declined parsing /workspace/infra/ansible/inventory/local.ini as it did not pass its verify_file() method
+script declined parsing /workspace/infra/ansible/inventory/local.ini as it did not pass its verify_file() method
+auto declined parsing /workspace/infra/ansible/inventory/local.ini as it did not pass its verify_file() method
+yaml declined parsing /workspace/infra/ansible/inventory/local.ini as it did not pass its verify_file() method
+Parsed /workspace/infra/ansible/inventory/local.ini inventory source with ini plugin
+redirecting (type: modules) ansible.builtin.ufw to community.general.ufw
+redirecting (type: modules) ansible.builtin.ufw to community.general.ufw
+redirecting (type: modules) ansible.builtin.ufw to community.general.ufw
+redirecting (type: modules) ansible.builtin.ufw to community.general.ufw
+redirecting (type: callback) ansible.builtin.yaml to community.general.yaml
+redirecting (type: callback) ansible.builtin.yaml to community.general.yaml
+Skipping callback 'default', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: site.yml *************************************************************
+1 plays in site.yml
+
+PLAY [Configure web servers] ***************************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /workspace/infra/ansible/site.yml:1
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: ubuntu
+<localhost> EXEC /bin/sh -c 'echo ~ubuntu && sleep 0'
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/ubuntu/.ansible/tmp `"&& mkdir "` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972 `" && echo ansible-tmp-1759055385.2620695-3997-102357677313972="` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972 `" ) && sleep 0'
+<localhost> Attempting python interpreter discovery
+<localhost> EXEC /bin/sh -c 'echo PLATFORM; uname; echo FOUND; command -v '"'"'python3.12'"'"'; command -v '"'"'python3.11'"'"'; command -v '"'"'python3.10'"'"'; command -v '"'"'python3.9'"'"'; command -v '"'"'python3.8'"'"'; command -v '"'"'python3.7'"'"'; command -v '"'"'python3.6'"'"'; command -v '"'"'/usr/bin/python3'"'"'; command -v '"'"'/usr/libexec/platform-python'"'"'; command -v '"'"'python2.7'"'"'; command -v '"'"'/usr/bin/python'"'"'; command -v '"'"'python'"'"'; echo ENDFOUND && sleep 0'
+<localhost> EXEC /bin/sh -c '/usr/bin/python3 && sleep 0'
+Using module file /home/ubuntu/.local/lib/python3.13/site-packages/ansible/modules/setup.py
+<localhost> PUT /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmp9xrhapzd TO /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972/AnsiballZ_setup.py
+<localhost> EXEC /bin/sh -c 'chmod u+x /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972/ /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972/AnsiballZ_setup.py && sleep 0'
+<localhost> EXEC /bin/sh -c 'sudo -H -S -n  -u root /bin/sh -c '"'"'echo BECOME-SUCCESS-jtdhopwdibgnzmvyofbbhkiibuehiuhj ; /usr/bin/python3 /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972/AnsiballZ_setup.py'"'"' && sleep 0'
+<localhost> EXEC /bin/sh -c 'rm -f -r /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.2620695-3997-102357677313972/ > /dev/null 2>&1 && sleep 0'
+ok: [localhost]
+
+TASK [common : Update apt cache] ***********************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:1
+skipping: [localhost] => changed=false 
+  false_condition: not ansible_check_mode
+  skip_reason: Conditional result was False
+
+TASK [common : Install base packages] ******************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:9
+skipping: [localhost] => changed=false 
+  false_condition: not ansible_check_mode
+  skip_reason: Conditional result was False
+
+TASK [common : Ensure UFW installed when enabled] ******************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:24
+skipping: [localhost] => changed=false 
+  false_condition: enable_ufw | bool
+  skip_reason: Conditional result was False
+
+TASK [common : Allow SSH in UFW] ***********************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:33
+skipping: [localhost] => changed=false 
+  false_condition: enable_ufw | bool
+  skip_reason: Conditional result was False
+
+TASK [common : Allow HTTP in UFW] **********************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:41
+skipping: [localhost] => changed=false 
+  false_condition: enable_ufw | bool
+  skip_reason: Conditional result was False
+
+TASK [common : Allow HTTPS in UFW] *********************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:50
+skipping: [localhost] => changed=false 
+  false_condition: enable_ufw | bool
+  skip_reason: Conditional result was False
+
+TASK [common : Enable UFW] *****************************************************
+task path: /workspace/infra/ansible/roles/common/tasks/main.yml:59
+skipping: [localhost] => changed=false 
+  false_condition: enable_ufw | bool
+  skip_reason: Conditional result was False
+
+TASK [nginx : Install NGINX] ***************************************************
+task path: /workspace/infra/ansible/roles/nginx/tasks/main.yml:1
+skipping: [localhost] => changed=false 
+  false_condition: not ansible_check_mode
+  skip_reason: Conditional result was False
+
+TASK [nginx : Create app root directory] ***************************************
+task path: /workspace/infra/ansible/roles/nginx/tasks/main.yml:9
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: ubuntu
+<localhost> EXEC /bin/sh -c 'echo ~ubuntu && sleep 0'
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/ubuntu/.ansible/tmp `"&& mkdir "` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694 `" && echo ansible-tmp-1759055385.9457881-4067-67700333944694="` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694 `" ) && sleep 0'
+Using module file /home/ubuntu/.local/lib/python3.13/site-packages/ansible/modules/file.py
+<localhost> PUT /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmp5lnysv9t TO /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694/AnsiballZ_file.py
+<localhost> EXEC /bin/sh -c 'chmod u+x /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694/ /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694/AnsiballZ_file.py && sleep 0'
+<localhost> EXEC /bin/sh -c 'sudo -H -S -n  -u root /bin/sh -c '"'"'echo BECOME-SUCCESS-lawkwhftbdjjhrqtovwvezrayoqngrkd ; /usr/bin/python3 /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694/AnsiballZ_file.py'"'"' && sleep 0'
+<localhost> EXEC /bin/sh -c 'rm -f -r /home/ubuntu/.ansible/tmp/ansible-tmp-1759055385.9457881-4067-67700333944694/ > /dev/null 2>&1 && sleep 0'
+changed: [localhost] => changed=true 
+  diff:
+    after:
+      path: /var/www/app/public
+      state: directory
+    before:
+      path: /var/www/app/public
+      state: absent
+  invocation:
+    module_args:
+      _diff_peek: null
+      _original_basename: null
+      access_time: null
+      access_time_format: '%Y%m%d%H%M.%S'
+      attributes: null
+      follow: true
+      force: false
+      group: www-data
+      mode: '0755'
+      modification_time: null
+      modification_time_format: '%Y%m%d%H%M.%S'
+      owner: www-data
+      path: /var/www/app/public
+      recurse: false
+      selevel: null
+      serole: null
+      setype: null
+      seuser: null
+      src: null
+      state: directory
+      unsafe_writes: false
+  path: /var/www/app/public
+
+TASK [nginx : Deploy default index.html if no upstream] ************************
+task path: /workspace/infra/ansible/roles/nginx/tasks/main.yml:17
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: ubuntu
+<localhost> EXEC /bin/sh -c 'echo ~ubuntu && sleep 0'
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/ubuntu/.ansible/tmp `"&& mkdir "` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633 `" && echo ansible-tmp-1759055386.1294503-4095-225997936153633="` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633 `" ) && sleep 0'
+Using module file /home/ubuntu/.local/lib/python3.13/site-packages/ansible/modules/stat.py
+<localhost> PUT /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmp_37850ny TO /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633/AnsiballZ_stat.py
+<localhost> EXEC /bin/sh -c 'chmod u+x /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633/ /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633/AnsiballZ_stat.py && sleep 0'
+<localhost> EXEC /bin/sh -c 'sudo -H -S -n  -u root /bin/sh -c '"'"'echo BECOME-SUCCESS-jjrjjynxtnylqrcestevjnccxedrcavs ; /usr/bin/python3 /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633/AnsiballZ_stat.py'"'"' && sleep 0'
+<localhost> EXEC /bin/sh -c 'rm -f -r /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.1294503-4095-225997936153633/ > /dev/null 2>&1 && sleep 0'
+changed: [localhost] => changed=true 
+  diff: []
+  invocation:
+    content: 'CENSORED: content is a no_log parameter'
+    dest: /var/www/app/public/index.html
+    group: www-data
+    mode: '0644'
+    module_args:
+      content: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+      dest: /var/www/app/public/index.html
+      group: www-data
+      mode: '0644'
+      owner: www-data
+    owner: www-data
+
+TASK [nginx : Deploy nginx site config] ****************************************
+task path: /workspace/infra/ansible/roles/nginx/tasks/main.yml:31
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: ubuntu
+<localhost> EXEC /bin/sh -c 'echo ~ubuntu && sleep 0'
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/ubuntu/.ansible/tmp `"&& mkdir "` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395 `" && echo ansible-tmp-1759055386.2998717-4123-20217270810395="` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395 `" ) && sleep 0'
+Using module file /home/ubuntu/.local/lib/python3.13/site-packages/ansible/modules/stat.py
+<localhost> PUT /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmp1vg6iay3 TO /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395/AnsiballZ_stat.py
+<localhost> EXEC /bin/sh -c 'chmod u+x /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395/ /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395/AnsiballZ_stat.py && sleep 0'
+<localhost> EXEC /bin/sh -c 'sudo -H -S -n  -u root /bin/sh -c '"'"'echo BECOME-SUCCESS-dkuirrbcfcvbhzjqsefktgqvqveimisi ; /usr/bin/python3 /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395/AnsiballZ_stat.py'"'"' && sleep 0'
+<localhost> EXEC /bin/sh -c 'rm -f -r /home/ubuntu/.ansible/tmp/ansible-tmp-1759055386.2998717-4123-20217270810395/ > /dev/null 2>&1 && sleep 0'
+Notification for handler Reload nginx has been saved.
+changed: [localhost] => changed=true 
+  diff: []
+  invocation:
+    dest: /etc/nginx/sites-available/default
+    follow: false
+    group: root
+    mode: '0644'
+    module_args:
+      dest: /etc/nginx/sites-available/default
+      follow: false
+      group: root
+      mode: '0644'
+      owner: root
+      src: /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmpmcti97sz/default.j2
+    owner: root
+    src: /home/ubuntu/.ansible/tmp/ansible-local-3992x4ocblag/tmpmcti97sz/default.j2
+
+TASK [nginx : Ensure nginx is enabled and running] *****************************
+task path: /workspace/infra/ansible/roles/nginx/tasks/main.yml:40
+skipping: [localhost] => changed=false 
+  false_condition: not ansible_check_mode
+  skip_reason: Conditional result was False
+NOTIFIED HANDLER nginx : Reload nginx for localhost
+
+RUNNING HANDLER [nginx : Reload nginx] *****************************************
+task path: /workspace/infra/ansible/roles/nginx/handlers/main.yml:1
+skipping: [localhost] => changed=false 
+  false_condition: not ansible_check_mode
+  skip_reason: Conditional result was False
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=10   rescued=0    ignored=0   
+
