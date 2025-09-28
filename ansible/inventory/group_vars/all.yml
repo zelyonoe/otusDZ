@@ -1,0 +1,28 @@
+---
+app_user: app
+app_root_dir: /var/www/app
+nginx_server_name: _
+nginx_site_name: app
+nginx_listen_port: 80
+enable_ufw: false
+
+base_packages:
+  - ca-certificates
+  - curl
+  - unzip
+  - tar
+  - gnupg
+  - software-properties-common
+  - build-essential
+  - python3
+  - python3-pip
+  - python3-venv
+  - acl
+  - htop
+
+git_packages:
+  - git
+
+nginx_packages:
+  - nginx
+

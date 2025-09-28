@@ -1,0 +1,15 @@
+---
+- name: Install git packages
+  ansible.builtin.apt:
+    name: "{{ git_packages }}"
+    state: present
+    update_cache: true
+  when: ansible_connection != 'local'
+
+- name: Configure global git safe.directory for app path (optional)
+  ansible.builtin.command:
+    cmd: git config --system --add safe.directory "{{ app_root_dir }}"
+  changed_when: false
+  failed_when: false
+  when: ansible_connection != 'local'
+

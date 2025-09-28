@@ -1,0 +1,190 @@
+2025-09-28T10:33:44+00:00 Starting local dry-run
+ansible-playbook [core 2.16.14]
+  config file = /workspace/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /workspace/ansible/.venv/lib/python3.13/site-packages/ansible
+  ansible collection location = /workspace/ansible/collections
+  executable location = /workspace/ansible/.venv/bin/ansible-playbook
+  python version = 3.13.3 (main, Aug 14 2025, 11:53:40) [GCC 14.2.0] (/workspace/ansible/.venv/bin/python)
+  jinja version = 3.1.6
+  libyaml = True
+Using /workspace/ansible/ansible.cfg as config file
+redirecting (type: callback) ansible.builtin.yaml to community.general.yaml
+ERROR! Invalid callback for stdout specified: yaml
+2025-09-28T10:34:14+00:00 Re-running local dry-run with default callback
+ansible-playbook [core 2.16.14]
+  config file = /workspace/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /workspace/ansible/.venv/lib/python3.13/site-packages/ansible
+  ansible collection location = /workspace/ansible/collections
+  executable location = /workspace/ansible/.venv/bin/ansible-playbook
+  python version = 3.13.3 (main, Aug 14 2025, 11:53:40) [GCC 14.2.0] (/workspace/ansible/.venv/bin/python)
+  jinja version = 3.1.6
+  libyaml = True
+Using /workspace/ansible/ansible.cfg as config file
+Skipping callback 'default', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: site.yml *************************************************************
+1 plays in playbooks/site.yml
+
+PLAY [Configure environment on servers] ****************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /workspace/ansible/playbooks/site.yml:2
+ok: [localhost]
+
+TASK [base : Ensure apt cache is up to date] ***********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:2
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Install base packages] ********************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:8
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application user] ******************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:14
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application root directory] ********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:22
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Optionally enable UFW and allow SSH and HTTP] *********************
+task path: /workspace/ansible/roles/base/tasks/main.yml:31
+fatal: [localhost]: FAILED! => {"msg": "The conditional check 'enable_ufw | bool' failed. The error was: error while evaluating conditional (enable_ufw | bool): 'enable_ufw' is undefined. 'enable_ufw' is undefined\n\nThe error appears to be in '/workspace/ansible/roles/base/tasks/main.yml': line 31, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n- name: Optionally enable UFW and allow SSH and HTTP\n  ^ here\n"}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=1    skipped=4    rescued=0    ignored=0   
+
+2025-09-28T10:34:52+00:00 Re-running local dry-run after defaults
+ansible-playbook [core 2.16.14]
+  config file = /workspace/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /workspace/ansible/.venv/lib/python3.13/site-packages/ansible
+  ansible collection location = /workspace/ansible/collections
+  executable location = /workspace/ansible/.venv/bin/ansible-playbook
+  python version = 3.13.3 (main, Aug 14 2025, 11:53:40) [GCC 14.2.0] (/workspace/ansible/.venv/bin/python)
+  jinja version = 3.1.6
+  libyaml = True
+Using /workspace/ansible/ansible.cfg as config file
+Skipping callback 'default', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: site.yml *************************************************************
+1 plays in playbooks/site.yml
+
+PLAY [Configure environment on servers] ****************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /workspace/ansible/playbooks/site.yml:2
+ok: [localhost]
+
+TASK [base : Ensure apt cache is up to date] ***********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:2
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Install base packages] ********************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:8
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application user] ******************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:14
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application root directory] ********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:22
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Optionally enable UFW and allow SSH and HTTP] *********************
+task path: /workspace/ansible/roles/base/tasks/main.yml:31
+skipping: [localhost] => {"changed": false, "false_condition": "(enable_ufw | default(false)) | bool", "skip_reason": "Conditional result was False"}
+
+TASK [git : Install git packages] **********************************************
+task path: /workspace/ansible/roles/git/tasks/main.yml:2
+fatal: [localhost]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'git_packages' is undefined. 'git_packages' is undefined\n\nThe error appears to be in '/workspace/ansible/roles/git/tasks/main.yml': line 2, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n---\n- name: Install git packages\n  ^ here\n"}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=1    skipped=5    rescued=0    ignored=0   
+
+2025-09-28T10:35:57+00:00 Re-running local dry-run after inventory group_vars move
+ansible-playbook [core 2.16.14]
+  config file = /workspace/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /workspace/ansible/.venv/lib/python3.13/site-packages/ansible
+  ansible collection location = /workspace/ansible/collections
+  executable location = /workspace/ansible/.venv/bin/ansible-playbook
+  python version = 3.13.3 (main, Aug 14 2025, 11:53:40) [GCC 14.2.0] (/workspace/ansible/.venv/bin/python)
+  jinja version = 3.1.6
+  libyaml = True
+Using /workspace/ansible/ansible.cfg as config file
+Skipping callback 'default', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: site.yml *************************************************************
+1 plays in playbooks/site.yml
+
+PLAY [Configure environment on servers] ****************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /workspace/ansible/playbooks/site.yml:2
+ok: [localhost]
+
+TASK [base : Ensure apt cache is up to date] ***********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:2
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Install base packages] ********************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:8
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application user] ******************************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:14
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Create application root directory] ********************************
+task path: /workspace/ansible/roles/base/tasks/main.yml:22
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [base : Optionally enable UFW and allow SSH and HTTP] *********************
+task path: /workspace/ansible/roles/base/tasks/main.yml:31
+skipping: [localhost] => {"changed": false, "false_condition": "(enable_ufw | default(false)) | bool", "skip_reason": "Conditional result was False"}
+
+TASK [git : Install git packages] **********************************************
+task path: /workspace/ansible/roles/git/tasks/main.yml:2
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [git : Configure global git safe.directory for app path (optional)] *******
+task path: /workspace/ansible/roles/git/tasks/main.yml:9
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Install nginx] ***************************************************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:2
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Ensure nginx service is enabled and started] *********************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:9
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Create web root] *************************************************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:16
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Deploy nginx site config] ****************************************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:25
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Enable site] *****************************************************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:35
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+TASK [nginx : Remove default site if present] **********************************
+task path: /workspace/ansible/roles/nginx/tasks/main.yml:44
+skipping: [localhost] => {"changed": false, "false_condition": "ansible_connection != 'local'", "skip_reason": "Conditional result was False"}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=13   rescued=0    ignored=0   
+

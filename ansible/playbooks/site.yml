@@ -1,0 +1,11 @@
+---
+- name: Configure environment on servers
+  hosts: all
+  become: "{{ ansible_connection != 'local' }}"
+  vars:
+    app_root_dir: "{{ app_root_dir | default('/var/www/app') }}"
+  roles:
+    - role: base
+    - role: git
+    - role: nginx
+
