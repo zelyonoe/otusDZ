@@ -1,0 +1,34 @@
+---
+# Переменные для dev серверов
+
+# Специфичные для dev окружения настройки
+environment: development
+debug_mode: true
+
+# Порты для приложения в dev окружении
+app_port: 3000
+app_env: development
+
+# Настройки базы данных (если используется)
+database:
+  name: "webapp_dev"
+  user: "webapp_user"
+  password: "dev_password_change_me"
+  host: "localhost"
+  port: 5432
+
+# Дополнительные пакеты для разработки
+dev_packages:
+  - nodejs
+  - npm
+  - postgresql-client
+  - redis-tools
+  - docker.io
+  - docker-compose
+
+# Настройки логирования для dev
+logging:
+  level: debug
+  file: "/var/log/webapp/app.log"
+  max_size: "100M"
+  rotate_count: 5

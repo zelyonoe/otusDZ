@@ -1,0 +1,132 @@
+=======================================
+Ansible Playbook Execution Log
+Playbook: setup-environment.yml
+Bastion IP: 51.250.1.100
+Timestamp: Fri Mar 15 14:30:22 UTC 2024
+Extra args: --tags system,nginx,security
+=======================================
+
+[INFO] Запуск playbook: setup-environment.yml
+[INFO] Bastion IP: 51.250.1.100
+[INFO] Проверка доступности bastion host...
+[INFO] Выполнение playbook...
+
+PLAY [Настройка окружения для приложения в Yandex Cloud] ******************
+
+TASK [Gathering Facts] *****************************************************
+ok: [dev-vm1]
+ok: [dev-vm2]
+
+TASK [Обновление кэша пакетов] *********************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Установка системных пакетов] ****************************************
+changed: [dev-vm1] => (item=['curl', 'wget', 'unzip', 'vim', 'htop', 'git', 'build-essential', 'software-properties-common', 'apt-transport-https', 'ca-certificates', 'gnupg', 'lsb-release', 'ufw', 'fail2ban'])
+changed: [dev-vm2] => (item=['curl', 'wget', 'unzip', 'vim', 'htop', 'git', 'build-essential', 'software-properties-common', 'apt-transport-https', 'ca-certificates', 'gnupg', 'lsb-release', 'ufw', 'fail2ban'])
+
+TASK [Установка Python пакетов] *******************************************
+ok: [dev-vm1] => (item=['python3', 'python3-pip', 'python3-venv', 'python3-dev'])
+ok: [dev-vm2] => (item=['python3', 'python3-pip', 'python3-venv', 'python3-dev'])
+
+TASK [Добавление репозитория NodeSource для Node.js] **********************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Установка Node.js и npm] *********************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Создание пользователя приложения] ************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Создание директории приложения] **************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Создание директории для логов] ***************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Установка Nginx] *****************************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Копирование конфигурации Nginx] **************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Активация сайта в Nginx] *********************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Удаление дефолтного сайта Nginx] ************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Настройка UFW firewall] **********************************************
+changed: [dev-vm1] => (item=22)
+changed: [dev-vm2] => (item=22)
+changed: [dev-vm1] => (item=80)
+changed: [dev-vm2] => (item=80)
+changed: [dev-vm1] => (item=443)
+changed: [dev-vm2] => (item=443)
+
+TASK [Включение UFW] *******************************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Установка и настройка Fail2Ban] *************************************
+ok: [dev-vm1]
+ok: [dev-vm2]
+
+TASK [Копирование конфигурации Fail2Ban] ***********************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Настройка SSH] *******************************************************
+changed: [dev-vm1] => (item={'regexp': '^#?PermitRootLogin', 'line': 'PermitRootLogin no'})
+changed: [dev-vm2] => (item={'regexp': '^#?PermitRootLogin', 'line': 'PermitRootLogin no'})
+changed: [dev-vm1] => (item={'regexp': '^#?PasswordAuthentication', 'line': 'PasswordAuthentication no'})
+changed: [dev-vm2] => (item={'regexp': '^#?PasswordAuthentication', 'line': 'PasswordAuthentication no'})
+changed: [dev-vm1] => (item={'regexp': '^#?PubkeyAuthentication', 'line': 'PubkeyAuthentication yes'})
+changed: [dev-vm2] => (item={'regexp': '^#?PubkeyAuthentication', 'line': 'PubkeyAuthentication yes'})
+
+TASK [Создание systemd service для приложения] ****************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+RUNNING HANDLER [start nginx] **********************************************
+ok: [dev-vm1]
+ok: [dev-vm2]
+
+RUNNING HANDLER [reload nginx] *********************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+RUNNING HANDLER [restart ssh] **********************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+RUNNING HANDLER [restart fail2ban] *****************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+RUNNING HANDLER [reload systemd] *******************************************
+ok: [dev-vm1]
+ok: [dev-vm2]
+
+PLAY RECAP *****************************************************************
+dev-vm1                    : ok=24   changed=20   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+dev-vm2                    : ok=24   changed=20   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+=======================================
+СВОДКА ВЫПОЛНЕНИЯ
+=======================================
+Playbook: setup-environment.yml
+Bastion IP: 51.250.1.100
+Время выполнения: Fri Mar 15 14:45:18 UTC 2024
+Статус: УСПЕШНО
+Лог-файл: logs/example_setup-environment_20240315_143022.log
+=======================================

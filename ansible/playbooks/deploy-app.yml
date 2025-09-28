@@ -1,0 +1,64 @@
+---
+- name: "Деплой приложения"
+  hosts: dev_servers
+  become: yes
+  gather_facts: no
+  
+  tasks:
+    - name: "Остановка приложения"
+      systemd:
+        name: "{{ app.name }}"
+        state: stopped
+      ignore_errors: yes
+      tags: ['deploy']
+
+    - name: "Обновление кода из репозитория"
+      git:
+        repo: "{{ app.repository }}"
+        dest: "{{ app.home }}/{{ app.name }}"
+        version: "{{ git_branch | default('main') }}"
+        force: yes
+      become_user: "{{ app.user }}"
+      when: app.repository is defined
+      tags: ['deploy', 'git']
+
+    - name: "Установка/обновление зависимостей Node.js"
+      npm:
+        path: "{{ app.home }}/{{ app.name }}"
+        state: present
+        production: "{{ 'yes' if environment == 'production' else 'no' }}"
+      become_user: "{{ app.user }}"
+      tags: ['deploy', 'dependencies']
+
+    - name: "Сборка приложения (если есть build скрипт)"
+      npm:
+        path: "{{ app.home }}/{{ app.name }}"
+        script: build
+      become_user: "{{ app.user }}"
+      ignore_errors: yes
+      tags: ['deploy', 'build']
+
+    - name: "Запуск приложения"
+      systemd:
+        name: "{{ app.name }}"
+        state: started
+        enabled: yes
+        daemon_reload: yes
+      tags: ['deploy']
+
+    - name: "Проверка статуса приложения"
+      systemd:
+        name: "{{ app.name }}"
+      register: app_status
+      tags: ['deploy', 'check']
+
+    - name: "Вывод статуса приложения"
+      debug:
+        msg: "Приложение {{ app.name }} {{ 'запущено' if app_status.status.ActiveState == 'active' else 'не запущено' }}"
+      tags: ['deploy', 'check']
+
+    - name: "Перезагрузка Nginx"
+      systemd:
+        name: nginx
+        state: reloaded
+      tags: ['deploy']

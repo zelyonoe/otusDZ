@@ -1,0 +1,205 @@
+---
+- name: "Настройка окружения для приложения в Yandex Cloud"
+  hosts: dev_servers
+  become: yes
+  gather_facts: yes
+  
+  pre_tasks:
+    - name: "Обновление кэша пакетов"
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      tags: ['system', 'packages']
+
+  tasks:
+    - name: "Установка системных пакетов"
+      apt:
+        name: "{{ system_packages }}"
+        state: present
+      tags: ['system', 'packages']
+
+    - name: "Установка Python пакетов"
+      apt:
+        name: "{{ python_packages }}"
+        state: present
+      tags: ['system', 'python']
+
+    - name: "Добавление репозитория NodeSource для Node.js"
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_{{ nodejs_version }}.x | sudo -E bash -
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+      tags: ['nodejs']
+
+    - name: "Установка Node.js и npm"
+      apt:
+        name: 
+          - nodejs
+        state: present
+        update_cache: yes
+      tags: ['nodejs']
+
+    - name: "Создание пользователя приложения"
+      user:
+        name: "{{ app.user }}"
+        group: "{{ app.group }}"
+        home: "{{ app.home }}"
+        shell: /bin/bash
+        create_home: yes
+        system: yes
+      tags: ['app', 'user']
+
+    - name: "Создание директории приложения"
+      file:
+        path: "{{ app.home }}"
+        state: directory
+        owner: "{{ app.user }}"
+        group: "{{ app.group }}"
+        mode: '0755'
+      tags: ['app', 'directories']
+
+    - name: "Создание директории для логов"
+      file:
+        path: "/var/log/{{ app.name }}"
+        state: directory
+        owner: "{{ app.user }}"
+        group: "{{ app.group }}"
+        mode: '0755'
+      tags: ['app', 'directories']
+
+    - name: "Установка Nginx"
+      apt:
+        name: nginx
+        state: present
+      notify: start nginx
+      tags: ['nginx']
+
+    - name: "Копирование конфигурации Nginx"
+      template:
+        src: nginx-site.conf.j2
+        dest: "/etc/nginx/sites-available/{{ app.name }}"
+        backup: yes
+      notify: reload nginx
+      tags: ['nginx', 'config']
+
+    - name: "Активация сайта в Nginx"
+      file:
+        src: "/etc/nginx/sites-available/{{ app.name }}"
+        dest: "/etc/nginx/sites-enabled/{{ app.name }}"
+        state: link
+      notify: reload nginx
+      tags: ['nginx', 'config']
+
+    - name: "Удаление дефолтного сайта Nginx"
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+      notify: reload nginx
+      tags: ['nginx', 'config']
+
+    - name: "Настройка UFW firewall"
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - "22"
+        - "80"
+        - "443"
+      when: security.ufw_enabled
+      tags: ['security', 'firewall']
+
+    - name: "Включение UFW"
+      ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+      when: security.ufw_enabled
+      tags: ['security', 'firewall']
+
+    - name: "Установка и настройка Fail2Ban"
+      apt:
+        name: fail2ban
+        state: present
+      when: security.fail2ban_enabled
+      tags: ['security', 'fail2ban']
+
+    - name: "Копирование конфигурации Fail2Ban"
+      template:
+        src: jail.local.j2
+        dest: /etc/fail2ban/jail.local
+        backup: yes
+      notify: restart fail2ban
+      when: security.fail2ban_enabled
+      tags: ['security', 'fail2ban']
+
+    - name: "Настройка SSH"
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        backup: yes
+      loop:
+        - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
+        - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+        - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+      notify: restart ssh
+      tags: ['security', 'ssh']
+
+    - name: "Создание systemd service для приложения"
+      template:
+        src: app.service.j2
+        dest: "/etc/systemd/system/{{ app.name }}.service"
+        backup: yes
+      notify: reload systemd
+      tags: ['app', 'service']
+
+    - name: "Клонирование репозитория приложения"
+      git:
+        repo: "{{ app.repository }}"
+        dest: "{{ app.home }}/{{ app.name }}"
+        version: main
+        force: yes
+      become_user: "{{ app.user }}"
+      tags: ['app', 'deploy']
+      when: app.repository is defined
+
+    - name: "Установка зависимостей Node.js (если есть package.json)"
+      npm:
+        path: "{{ app.home }}/{{ app.name }}"
+        state: present
+      become_user: "{{ app.user }}"
+      tags: ['app', 'deploy', 'nodejs']
+      when: app.repository is defined
+
+  handlers:
+    - name: start nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded
+
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: restart ssh
+      systemd:
+        name: ssh
+        state: restarted
+
+    - name: restart fail2ban
+      systemd:
+        name: fail2ban
+        state: restarted
+        enabled: yes
+
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes

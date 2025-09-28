@@ -1,0 +1,45 @@
+[Unit]
+Description={{ app.name }} Web Application
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User={{ app.user }}
+Group={{ app.group }}
+WorkingDirectory={{ app.home }}/{{ app.name }}
+Environment=NODE_ENV={{ app_env }}
+Environment=PORT={{ app_port }}
+{% if database is defined %}
+Environment=DB_HOST={{ database.host }}
+Environment=DB_PORT={{ database.port }}
+Environment=DB_NAME={{ database.name }}
+Environment=DB_USER={{ database.user }}
+Environment=DB_PASSWORD={{ database.password }}
+{% endif %}
+
+# Команда запуска приложения (настройте под ваше приложение)
+ExecStart=/usr/bin/node server.js
+# Альтернативно для приложений с npm:
+# ExecStart=/usr/bin/npm start
+
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{ app.name }}
+
+# Ограничения ресурсов
+LimitNOFILE=65536
+LimitNPROC=65536
+
+# Безопасность
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths={{ app.home }}
+ReadWritePaths=/var/log/{{ app.name }}
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

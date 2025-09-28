@@ -136,7 +136,7 @@ resource "yandex_compute_instance" "work_vm" {
 
   network_interface {
     subnet_id          = yandex_vpc_subnet.internal_subnet.id
-    security_group_ids = [yandex_vpc_security_group.internal_sg.id]
+    security_group_ids = [yandex_vpc_security_group.internal_sg.id, yandex_vpc_security_group.work_vm_sg.id]
   }
 
   metadata = {
@@ -156,12 +156,64 @@ resource "yandex_vpc_security_group" "work_vm_sg" {
     v4_cidr_blocks = ["172.16.1.0/24"]
   }
 
+  ingress {
+    description    = "HTTP traffic"
+    protocol       = "TCP"
+    port           = 80
+    v4_cidr_blocks = ["172.16.1.0/24"]
+  }
+
+  ingress {
+    description    = "HTTPS traffic"
+    protocol       = "TCP"
+    port           = 443
+    v4_cidr_blocks = ["172.16.1.0/24"]
+  }
+
+  ingress {
+    description    = "Application port"
+    protocol       = "TCP"
+    port           = 3000
+    v4_cidr_blocks = ["172.16.1.0/24"]
+  }
+
   egress {
     description    = "Outbound traffic"
     protocol       = "ANY"
     from_port      = 0
     to_port        = 65535
     v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Outputs для Ansible
+output "bastion_public_ip" {
+  description = "Публичный IP адрес bastion host"
+  value       = yandex_compute_instance.bastion_host.network_interface.0.nat_ip_address
+}
+
+output "bastion_private_ip" {
+  description = "Приватный IP адрес bastion host"
+  value       = yandex_compute_instance.bastion_host.network_interface.1.ip_address
+}
+
+output "dev_vm1_private_ip" {
+  description = "Приватный IP адрес первой рабочей ВМ"
+  value       = yandex_compute_instance.work_vm[0].network_interface.0.ip_address
+}
+
+output "dev_vm2_private_ip" {
+  description = "Приватный IP адрес второй рабочей ВМ"
+  value       = yandex_compute_instance.work_vm[1].network_interface.0.ip_address
+}
+
+output "ansible_inventory_info" {
+  description = "Информация для Ansible inventory"
+  value = {
+    bastion_public_ip  = yandex_compute_instance.bastion_host.network_interface.0.nat_ip_address
+    bastion_private_ip = yandex_compute_instance.bastion_host.network_interface.1.ip_address
+    dev_vm1_ip         = yandex_compute_instance.work_vm[0].network_interface.0.ip_address
+    dev_vm2_ip         = yandex_compute_instance.work_vm[1].network_interface.0.ip_address
   }
 }
 

@@ -1,0 +1,63 @@
+=======================================
+Ansible Playbook Execution Log
+Playbook: deploy-app.yml
+Bastion IP: 51.250.1.100
+Timestamp: Fri Mar 15 14:45:11 UTC 2024
+Extra args: 
+=======================================
+
+[INFO] Запуск playbook: deploy-app.yml
+[INFO] Bastion IP: 51.250.1.100
+[INFO] Выполнение playbook...
+
+PLAY [Деплой приложения] ***************************************************
+
+TASK [Остановка приложения] ************************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Обновление кода из репозитория] *************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Установка/обновление зависимостей Node.js] **************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Сборка приложения (если есть build скрипт)] *************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Запуск приложения] ***************************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+TASK [Проверка статуса приложения] ****************************************
+ok: [dev-vm1]
+ok: [dev-vm2]
+
+TASK [Вывод статуса приложения] *******************************************
+ok: [dev-vm1] => {
+    "msg": "Приложение webapp запущено"
+}
+ok: [dev-vm2] => {
+    "msg": "Приложение webapp запущено"
+}
+
+TASK [Перезагрузка Nginx] **************************************************
+changed: [dev-vm1]
+changed: [dev-vm2]
+
+PLAY RECAP *****************************************************************
+dev-vm1                    : ok=8    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+dev-vm2                    : ok=8    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+=======================================
+СВОДКА ВЫПОЛНЕНИЯ
+=======================================
+Playbook: deploy-app.yml
+Bastion IP: 51.250.1.100
+Время выполнения: Fri Mar 15 14:47:33 UTC 2024
+Статус: УСПЕШНО
+Лог-файл: logs/example_deploy-app_20240315_144511.log
+=======================================
